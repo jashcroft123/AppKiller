@@ -116,13 +116,13 @@ func startAppKiller(updateAttempt func(time.Time, string)) {
 	defer handleCrash()
 
 	c := cron.New()
+
 	_, err := c.AddFunc(schedule, func() {
 		status := killApp(appToKill)
 		updateAttempt(time.Now(), status)
 	})
 	if err != nil {
-		logging.Error("Invalid cron expression '%s': %v", schedule, err)
-		return
+		panic(fmt.Sprintf("Failed to parse cron expression '%s': %v", schedule, err))
 	}
 
 	if atLaunch {

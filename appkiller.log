@@ -57,3 +57,56 @@ created by main.onReady in goroutine 7
 Output: ERROR: The process "notepad.exe" not found.
 
 2025-05-30 22:54:46 INFO: Cron schedule started with expression: */10 * * * *
+2025-05-30 22:57:37 INFO: Running in silent mode, console will be hidden.
+2025-05-30 22:57:37 INFO: AppKiller initialized with app='notepad.exe', cron='*', atLaunch=true
+2025-05-30 22:57:37 ERROR: Invalid cron expression '*': expected exactly 5 fields, found 1: [*]
+2025-05-30 22:57:42 INFO: Exiting AppKiller
+2025-05-30 22:57:43 INFO: Exiting AppKiller
+2025-05-30 22:57:45 INFO: Running in silent mode, console will be hidden.
+2025-05-30 22:57:45 INFO: AppKiller initialized with app='notepad.exe', cron='*', atLaunch=true
+2025-05-30 22:57:45 ERROR: Invalid cron expression '*': expected exactly 5 fields, found 1: [*]
+2025-05-30 22:58:27 INFO: Exiting AppKiller
+2025-05-30 22:59:35 INFO: Running in silent mode, console will be hidden.
+2025-05-30 22:59:35 INFO: AppKiller initialized with app='notepad.exe', cron='*', atLaunch=true
+2025-05-30 22:59:35 ERROR: AppKiller crashed: Failed to parse cron expression '*': expected exactly 5 fields, found 1: [*]
+2025-05-30 22:59:35 ERROR: Stack trace:
+goroutine 8 [running]:
+main.handleCrash()
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:83 +0x86
+panic({0x503240?, 0xc0000223a0?})
+	C:/Program Files/Go/src/runtime/panic.go:792 +0x132
+main.startAppKiller(0xc000022330)
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:124 +0x245
+created by main.onReady in goroutine 7
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:105 +0xf8
+
+2025-05-30 23:03:41 INFO: Running in silent mode, console will be hidden.
+2025-05-30 23:03:41 INFO: AppKiller initialized with app='notepad.exe', cron='1', atLaunch=true
+2025-05-30 23:03:41 INFO: Scheduled task added with ID: 0
+2025-05-30 23:03:41 ERROR: AppKiller crashed: Failed to parse cron expression '1': expected exactly 5 fields, found 1: [1]
+2025-05-30 23:03:41 ERROR: Stack trace:
+goroutine 8 [running]:
+main.handleCrash()
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:83 +0x86
+panic({0xf53240?, 0xc0000223e0?})
+	C:/Program Files/Go/src/runtime/panic.go:792 +0x132
+main.startAppKiller(0xc000022330)
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:125 +0x299
+created by main.onReady in goroutine 7
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:105 +0xf8
+
+2025-05-30 23:06:02 INFO: Running in silent mode, console will be hidden.
+2025-05-30 23:06:02 INFO: AppKiller initialized with app='notepad.exe', cron='*****', atLaunch=true
+2025-05-30 23:06:02 INFO: Scheduled task added with ID: 0
+2025-05-30 23:06:02 ERROR: AppKiller crashed: Failed to parse cron expression '*****': expected exactly 5 fields, found 1: [*****]
+2025-05-30 23:06:02 ERROR: Stack trace:
+goroutine 34 [running]:
+main.handleCrash()
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:83 +0x86
+panic({0xf53240?, 0xc0001a80b0?})
+	C:/Program Files/Go/src/runtime/panic.go:792 +0x132
+main.startAppKiller(0xc0001a8000)
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:125 +0x299
+created by main.onReady in goroutine 20
+	C:/Users/jashc/Documents/Go/AppKiller/main.go:105 +0xf8
+
