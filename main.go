@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	_ "embed"
 	"flag"
 	"fmt"
@@ -141,7 +142,21 @@ func killApp(name string) string {
 		return "not required"
 	}
 
+	running, err := isProcessRunning(name)
+	if err != nil {
+		logging.Error("Failed to check if %s is running: %v", name, err)
+		return "fail"
+	}
+	if !running {
+		logging.Info("%s not running, no kill needed", name)
+		return "not running"
+	}
+
 	cmd := exec.Command("taskkill", "/IM", name, "/F")
+	cmd.SysProcAttr = &syscall.SysProcAttr{
+		CreationFlags: syscall.SW_MINIMIZE, // Hide the console window
+	}
+
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		logging.Error("Failed to kill %s: %v\nOutput: %s", name, err, string(out))
@@ -150,4 +165,17 @@ func killApp(name string) string {
 
 	logging.Info("Killed process %s successfully", name)
 	return "success"
+}
+
+func isProcessRunning(name string) (bool, error) {
+	cmd := exec.Command("tasklist", "/FI", "IMAGENAME eq "+name)
+	cmd.SysProcAttr = &syscall.SysProcAttr{
+		CreationFlags: syscall.SW_MINIMIZE,
+	}
+	out, err := cmd.Output()
+	if err != nil {
+		return false, err
+	}
+	// tasklist output header contains "Image Name", so check if process name appears beyond the header line
+	return bytes.Contains(out, []byte(name)), nil
 }

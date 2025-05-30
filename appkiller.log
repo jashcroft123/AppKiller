@@ -110,3 +110,49 @@ main.startAppKiller(0xc0001a8000)
 created by main.onReady in goroutine 20
 	C:/Users/jashc/Documents/Go/AppKiller/main.go:105 +0xf8
 
+2025-05-30 23:07:11 INFO: Running in silent mode, console will be hidden.
+2025-05-30 23:07:11 INFO: AppKiller initialized with app='notepad.exe', cron='* * * * *', atLaunch=true
+2025-05-30 23:07:11 INFO: Scheduled task added with ID: 1
+2025-05-30 23:07:11 INFO: Immediate execution requested
+2025-05-30 23:07:12 INFO: Killed process notepad.exe successfully
+2025-05-30 23:07:12 INFO: Cron schedule started with expression: * * * * *
+2025-05-30 23:08:01 INFO: Killed process notepad.exe successfully
+2025-05-30 23:09:00 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:09:46 INFO: Exiting AppKiller
+2025-05-30 23:09:55 INFO: Running in silent mode, console will be hidden.
+2025-05-30 23:09:55 INFO: AppKiller initialized with app='notepad.exe', cron='* * * * *', atLaunch=true
+2025-05-30 23:09:55 INFO: Immediate execution requested
+2025-05-30 23:09:56 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:09:56 INFO: Cron schedule started with expression: * * * * *
+2025-05-30 23:10:00 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:11:00 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:12:00 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:13:00 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:14:00 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:15:00 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:16:00 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 23:16:05 INFO: Exiting AppKiller
+2025-05-30 23:16:10 INFO: Running in silent mode, console will be hidden.
+2025-05-30 23:16:10 INFO: AppKiller initialized with app='notepad.exe', cron='* * * * *', atLaunch=true
+2025-05-30 23:16:11 INFO: Immediate execution requested
+2025-05-30 23:16:11 INFO: notepad.exe not running, no kill needed
+2025-05-30 23:16:11 INFO: Cron schedule started with expression: * * * * *
+2025-05-30 23:16:34 INFO: Exiting AppKiller
