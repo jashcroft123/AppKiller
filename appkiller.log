@@ -1,0 +1,5 @@
+2025-05-30 21:45:49 INFO: Executing kill immediately for 'notepad.exe'
+2025-05-30 21:45:49 ERROR: Failed to kill notepad.exe: exit status 128
+Output: ERROR: The process "notepad.exe" not found.
+
+2025-05-30 21:45:49 INFO: Scheduled kill for 'notepad.exe' at cron: */10 * * * *
