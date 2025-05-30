@@ -18,7 +18,10 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
-const applicationName = "AppKiller"
+const (
+	applicationName  = "AppKiller"
+	CREATE_NO_WINDOW = 0x08000000 // Hide cmd window when calling taskkill/tasklist
+)
 
 //go:embed icon.ico
 var iconData []byte
@@ -39,25 +42,22 @@ func hideConsole() {
 func init() {
 	logging.Init()
 
-	// Parse CLI args early
 	flag.StringVar(&appToKill, "app", "", "Name of the app/process to kill")
 	flag.StringVar(&schedule, "cron", "*/10 * * * *", "Cron schedule (default: every 10 minutes)")
 	flag.BoolVar(&atLaunch, "immediate", true, "Execute immediately on launch")
-	flag.BoolVar(&silent, "silent", true, "Execute Silently on launch (no terminal updates)")
+	flag.BoolVar(&silent, "silent", true, "Hide console on launch (silent mode)")
 	flag.Parse()
 
 	if silent {
 		hideConsole()
-		logging.Info("Running in silent mode, console will be hidden.")
+		logging.Info("Running in silent mode, console hidden.")
 	}
 
-	// Check if required args are present
 	if appToKill == "" {
-		fmt.Println("Usage: appkiller -app <process_name> [-cron <cron_schedule>] [-immediate]")
+		fmt.Println("Usage: appkiller -app <process_name> [-cron <cron_schedule>] [-immediate] [-silent]")
 		os.Exit(1)
 	}
 
-	// Attempt to acquire mutex
 	_, err := appMutex.CreateMutex(applicationName + "Mutex")
 	if err != nil {
 		logging.Error("Another instance is already running: %v", err)
@@ -73,17 +73,13 @@ func main() {
 	systray.Run(onReady, onExit)
 }
 
-func dispose() {
-	systray.Quit()
-}
-
 func handleCrash() {
 	if r := recover(); r != nil {
 		logging.Error("AppKiller crashed: %v", r)
 		buf := make([]byte, 4096)
 		n := runtime.Stack(buf, false)
 		logging.Error("Stack trace:\n%s", string(buf[:n]))
-		dispose()
+		systray.Quit()
 		os.Exit(1)
 	}
 }
@@ -93,20 +89,33 @@ func onReady() {
 	systray.SetTitle(applicationName)
 
 	mLastAttempt := systray.AddMenuItem("Last attempt: initializing...", "Most recent attempt time")
+	mManual := systray.AddMenuItem("Trigger Now", "Manually trigger kill action")
 	mQuit := systray.AddMenuItem("Exit", "Quit the AppKiller")
 	mLastAttempt.Disable()
 
-	// Function to update tooltip/menu with last attempt status
 	updateAttempt := func(t time.Time, status string) {
 		text := fmt.Sprintf("Last attempt: %s (%s)", t.Format("2006-01-02 15:04:05"), status)
 		systray.SetTooltip(fmt.Sprintf("%s is running\n%s", applicationName, text))
 		mLastAttempt.SetTitle(text)
+		logging.Info("Last attempt at %s: %s", t.Format("2006-01-02 15:04:05"), status)
 	}
 
 	go startAppKiller(updateAttempt)
 
-	<-mQuit.ClickedCh
-	systray.Quit()
+	// Manual trigger and quit listener
+	go func() {
+		for {
+			select {
+			case <-mManual.ClickedCh:
+				logging.Info("Manual trigger clicked")
+				status := killApp(appToKill)
+				updateAttempt(time.Now(), status)
+			case <-mQuit.ClickedCh:
+				systray.Quit()
+				return
+			}
+		}
+	}()
 }
 
 func onExit() {
@@ -142,19 +151,19 @@ func killApp(name string) string {
 		return "not required"
 	}
 
-	running, err := isProcessRunning(name)
-	if err != nil {
-		logging.Error("Failed to check if %s is running: %v", name, err)
-		return "fail"
-	}
-	if !running {
-		logging.Info("%s not running, no kill needed", name)
-		return "not running"
-	}
+	// running, err := isProcessRunning(name)
+	// if err != nil {
+	// 	logging.Error("Failed to check if %s is running: %v", name, err)
+	// 	return "fail"
+	// }
+	// if !running {
+	// 	logging.Info("%s not running, no kill needed", name)
+	// 	return "not running"
+	// }
 
 	cmd := exec.Command("taskkill", "/IM", name, "/F")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		CreationFlags: syscall.SW_MINIMIZE, // Hide the console window
+		CreationFlags: CREATE_NO_WINDOW,
 	}
 
 	out, err := cmd.CombinedOutput()
@@ -168,14 +177,18 @@ func killApp(name string) string {
 }
 
 func isProcessRunning(name string) (bool, error) {
-	cmd := exec.Command("tasklist", "/FI", "IMAGENAME eq "+name)
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		CreationFlags: syscall.SW_MINIMIZE,
-	}
+	cmd := exec.Command("tasklist")
 	out, err := cmd.Output()
 	if err != nil {
 		return false, err
 	}
-	// tasklist output header contains "Image Name", so check if process name appears beyond the header line
-	return bytes.Contains(out, []byte(name)), nil
+	lines := bytes.Split(out, []byte{'\n'})
+	nameLower := bytes.ToLower([]byte(name))
+	for _, line := range lines {
+		fields := bytes.Fields(line)
+		if len(fields) > 0 && bytes.Equal(bytes.ToLower(fields[0]), nameLower) {
+			return true, nil
+		}
+	}
+	return false, nil
 }

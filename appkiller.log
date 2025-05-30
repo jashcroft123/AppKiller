@@ -1,158 +1,20 @@
-2025-05-30 22:38:29 INFO: AppKiller initialized with app='notepad.exe', cron='*/10 * * * *', atLaunch=true
-2025-05-30 22:38:29 INFO: Immediate execution requested
-2025-05-30 22:38:29 INFO: Killed process notepad.exe successfully
-2025-05-30 22:38:29 INFO: Cron schedule started with expression: */10 * * * *
-2025-05-30 22:39:37 INFO: Exiting AppKiller
-2025-05-30 22:39:45 INFO: AppKiller initialized with app='notepad.exe', cron='*/10 * * * *', atLaunch=true
-2025-05-30 22:39:45 INFO: Immediate execution requested
-2025-05-30 22:39:45 INFO: Killed process notepad.exe successfully
-2025-05-30 22:39:45 INFO: Cron schedule started with expression: */10 * * * *
-2025-05-30 22:47:57 INFO: AppKiller initialized with app='notepad.exe', cron='*/10 * * * *', atLaunch=true
-2025-05-30 22:47:57 INFO: Immediate execution requested
-2025-05-30 22:47:58 ERROR: Failed to kill notepad.exe: exit status 128
+2025-05-30 23:44:29 INFO: Running in silent mode, console hidden.
+2025-05-30 23:44:29 INFO: AppKiller initialized with app='notepad.exe', cron='* * * * *', atLaunch=true
+2025-05-30 23:44:29 INFO: Immediate execution requested
+2025-05-30 23:44:29 INFO: Killed process notepad.exe successfully
+2025-05-30 23:44:29 INFO: Last attempt at 2025-05-30 23:44:29: success
+2025-05-30 23:44:29 INFO: Cron schedule started with expression: * * * * *
+2025-05-30 23:45:00 INFO: Killed process notepad.exe successfully
+2025-05-30 23:45:00 INFO: Last attempt at 2025-05-30 23:45:00: success
+2025-05-30 23:46:00 ERROR: Failed to kill notepad.exe: exit status 128
 Output: ERROR: The process "notepad.exe" not found.
 
-2025-05-30 22:47:58 INFO: Cron schedule started with expression: */10 * * * *
-2025-05-30 22:48:19 INFO: Exiting AppKiller
-2025-05-30 22:48:29 INFO: AppKiller initialized with app='notepad.exe', cron='*/10 * * * *', atLaunch=true
-2025-05-30 22:48:29 INFO: Immediate execution requested
-2025-05-30 22:48:29 ERROR: Failed to kill notepad.exe: exit status 128
+2025-05-30 23:46:00 INFO: Last attempt at 2025-05-30 23:46:00: fail
+2025-05-30 23:47:00 ERROR: Failed to kill notepad.exe: exit status 128
 Output: ERROR: The process "notepad.exe" not found.
 
-2025-05-30 22:48:29 INFO: Cron schedule started with expression: */10 * * * *
-2025-05-30 22:49:03 INFO: Exiting AppKiller
-2025-05-30 22:51:25 INFO: Running in silent mode, console will be hidden.
-2025-05-30 22:51:25 INFO: AppKiller initialized with app='notepad.exe', cron='*/10 * * * *', atLaunch=true
-2025-05-30 22:51:25 ERROR: AppKiller crashed: AppKiller started, but this should never happen. If you see this, please report it as a bug.
-2025-05-30 22:51:25 ERROR: Stack trace:
-goroutine 1 [running, locked to thread]:
-main.handleCrash()
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:82 +0xa5
-panic({0x8962e0?, 0x9225e0?})
-	C:/Program Files/Go/src/runtime/panic.go:792 +0x132
-main.main()
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:72 +0x3e
-
-2025-05-30 22:51:52 INFO: Running in silent mode, console will be hidden.
-2025-05-30 22:51:52 INFO: AppKiller initialized with app='notepad.exe', cron='*/10 * * * *', atLaunch=true
-2025-05-30 22:52:18 INFO: Running in silent mode, console will be hidden.
-2025-05-30 22:52:18 INFO: AppKiller initialized with app='notepad.exe', cron='*/10 * * * *', atLaunch=true
-2025-05-30 22:52:19 ERROR: AppKiller crashed: AppKiller started, but this should never happen. If you see this, please report it as a bug.
-2025-05-30 22:52:19 ERROR: Stack trace:
-goroutine 18 [running]:
-main.handleCrash()
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:81 +0xa5
-panic({0xa29620?, 0xabea90?})
-	C:/Program Files/Go/src/runtime/panic.go:792 +0x132
-main.startAppKiller(0x0?)
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:120 +0x4a
-created by main.onReady in goroutine 7
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:106 +0xf8
-
-2025-05-30 22:53:32 INFO: Exiting AppKiller
-2025-05-30 22:54:45 INFO: Running in silent mode, console will be hidden.
-2025-05-30 22:54:45 INFO: AppKiller initialized with app='notepad.exe', cron='*/10 * * * *', atLaunch=true
-2025-05-30 22:54:45 INFO: Immediate execution requested
-2025-05-30 22:54:46 ERROR: Failed to kill notepad.exe: exit status 128
+2025-05-30 23:47:00 INFO: Last attempt at 2025-05-30 23:47:00: fail
+2025-05-30 23:48:00 ERROR: Failed to kill notepad.exe: exit status 128
 Output: ERROR: The process "notepad.exe" not found.
 
-2025-05-30 22:54:46 INFO: Cron schedule started with expression: */10 * * * *
-2025-05-30 22:57:37 INFO: Running in silent mode, console will be hidden.
-2025-05-30 22:57:37 INFO: AppKiller initialized with app='notepad.exe', cron='*', atLaunch=true
-2025-05-30 22:57:37 ERROR: Invalid cron expression '*': expected exactly 5 fields, found 1: [*]
-2025-05-30 22:57:42 INFO: Exiting AppKiller
-2025-05-30 22:57:43 INFO: Exiting AppKiller
-2025-05-30 22:57:45 INFO: Running in silent mode, console will be hidden.
-2025-05-30 22:57:45 INFO: AppKiller initialized with app='notepad.exe', cron='*', atLaunch=true
-2025-05-30 22:57:45 ERROR: Invalid cron expression '*': expected exactly 5 fields, found 1: [*]
-2025-05-30 22:58:27 INFO: Exiting AppKiller
-2025-05-30 22:59:35 INFO: Running in silent mode, console will be hidden.
-2025-05-30 22:59:35 INFO: AppKiller initialized with app='notepad.exe', cron='*', atLaunch=true
-2025-05-30 22:59:35 ERROR: AppKiller crashed: Failed to parse cron expression '*': expected exactly 5 fields, found 1: [*]
-2025-05-30 22:59:35 ERROR: Stack trace:
-goroutine 8 [running]:
-main.handleCrash()
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:83 +0x86
-panic({0x503240?, 0xc0000223a0?})
-	C:/Program Files/Go/src/runtime/panic.go:792 +0x132
-main.startAppKiller(0xc000022330)
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:124 +0x245
-created by main.onReady in goroutine 7
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:105 +0xf8
-
-2025-05-30 23:03:41 INFO: Running in silent mode, console will be hidden.
-2025-05-30 23:03:41 INFO: AppKiller initialized with app='notepad.exe', cron='1', atLaunch=true
-2025-05-30 23:03:41 INFO: Scheduled task added with ID: 0
-2025-05-30 23:03:41 ERROR: AppKiller crashed: Failed to parse cron expression '1': expected exactly 5 fields, found 1: [1]
-2025-05-30 23:03:41 ERROR: Stack trace:
-goroutine 8 [running]:
-main.handleCrash()
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:83 +0x86
-panic({0xf53240?, 0xc0000223e0?})
-	C:/Program Files/Go/src/runtime/panic.go:792 +0x132
-main.startAppKiller(0xc000022330)
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:125 +0x299
-created by main.onReady in goroutine 7
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:105 +0xf8
-
-2025-05-30 23:06:02 INFO: Running in silent mode, console will be hidden.
-2025-05-30 23:06:02 INFO: AppKiller initialized with app='notepad.exe', cron='*****', atLaunch=true
-2025-05-30 23:06:02 INFO: Scheduled task added with ID: 0
-2025-05-30 23:06:02 ERROR: AppKiller crashed: Failed to parse cron expression '*****': expected exactly 5 fields, found 1: [*****]
-2025-05-30 23:06:02 ERROR: Stack trace:
-goroutine 34 [running]:
-main.handleCrash()
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:83 +0x86
-panic({0xf53240?, 0xc0001a80b0?})
-	C:/Program Files/Go/src/runtime/panic.go:792 +0x132
-main.startAppKiller(0xc0001a8000)
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:125 +0x299
-created by main.onReady in goroutine 20
-	C:/Users/jashc/Documents/Go/AppKiller/main.go:105 +0xf8
-
-2025-05-30 23:07:11 INFO: Running in silent mode, console will be hidden.
-2025-05-30 23:07:11 INFO: AppKiller initialized with app='notepad.exe', cron='* * * * *', atLaunch=true
-2025-05-30 23:07:11 INFO: Scheduled task added with ID: 1
-2025-05-30 23:07:11 INFO: Immediate execution requested
-2025-05-30 23:07:12 INFO: Killed process notepad.exe successfully
-2025-05-30 23:07:12 INFO: Cron schedule started with expression: * * * * *
-2025-05-30 23:08:01 INFO: Killed process notepad.exe successfully
-2025-05-30 23:09:00 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:09:46 INFO: Exiting AppKiller
-2025-05-30 23:09:55 INFO: Running in silent mode, console will be hidden.
-2025-05-30 23:09:55 INFO: AppKiller initialized with app='notepad.exe', cron='* * * * *', atLaunch=true
-2025-05-30 23:09:55 INFO: Immediate execution requested
-2025-05-30 23:09:56 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:09:56 INFO: Cron schedule started with expression: * * * * *
-2025-05-30 23:10:00 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:11:00 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:12:00 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:13:00 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:14:00 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:15:00 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:16:00 ERROR: Failed to kill notepad.exe: exit status 128
-Output: ERROR: The process "notepad.exe" not found.
-
-2025-05-30 23:16:05 INFO: Exiting AppKiller
-2025-05-30 23:16:10 INFO: Running in silent mode, console will be hidden.
-2025-05-30 23:16:10 INFO: AppKiller initialized with app='notepad.exe', cron='* * * * *', atLaunch=true
-2025-05-30 23:16:11 INFO: Immediate execution requested
-2025-05-30 23:16:11 INFO: notepad.exe not running, no kill needed
-2025-05-30 23:16:11 INFO: Cron schedule started with expression: * * * * *
-2025-05-30 23:16:34 INFO: Exiting AppKiller
+2025-05-30 23:48:00 INFO: Last attempt at 2025-05-30 23:48:00: fail
