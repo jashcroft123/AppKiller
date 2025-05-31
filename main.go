@@ -189,15 +189,15 @@ func killApp(name string) string {
 		return "App not specified"
 	}
 
-	// running, err := isProcessRunning(name)
-	// if err != nil {
-	// 	logging.Error("Failed to check if %s is running: %v", name, err)
-	// 	return "fail"
-	// }
-	// if !running {
-	// 	logging.Info("%s not running, no kill needed", name)
-	// 	return "not running"
-	// }
+	running, err := isProcessRunning(name)
+	if err != nil {
+		logging.Error("Failed to check if %s is running: %v", name, err)
+		return "fail"
+	}
+	if !running {
+		logging.Info("%s not running, no kill needed", name)
+		return "not running"
+	}
 
 	cmd := exec.Command("taskkill", "/IM", name, "/F")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
@@ -216,6 +216,9 @@ func killApp(name string) string {
 
 func isProcessRunning(name string) (bool, error) {
 	cmd := exec.Command("tasklist")
+	cmd.SysProcAttr = &syscall.SysProcAttr{
+		CreationFlags: CREATE_NO_WINDOW,
+	}
 	out, err := cmd.Output()
 	if err != nil {
 		return false, err
