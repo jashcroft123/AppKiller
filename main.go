@@ -31,6 +31,7 @@ var (
 	schedule  string
 	atLaunch  bool
 	silent    bool
+	exCount   int
 )
 
 func hideConsole() {
@@ -46,7 +47,10 @@ func init() {
 	flag.StringVar(&schedule, "cron", "*/10 * * * *", "Cron schedule (default: every 10 minutes)")
 	flag.BoolVar(&atLaunch, "immediate", true, "Execute immediately on launch")
 	flag.BoolVar(&silent, "silent", true, "Hide console on launch (silent mode)")
+	flag.IntVar(&exCount, "count", -1, "Number of times to run the kill command (-1 for infinite)")
 	flag.Parse()
+
+	logging.Info("CLI args: %v", os.Args)
 
 	if silent {
 		hideConsole()
@@ -54,7 +58,8 @@ func init() {
 	}
 
 	if appToKill == "" {
-		fmt.Println("Usage: appkiller -app <process_name> [-cron <cron_schedule>] [-immediate] [-silent]")
+		// If no application is specified, we cannot proceed so log and exit
+		logging.Error("No application specified to kill. Use -app <process_name> to specify the application.")
 		os.Exit(1)
 	}
 
@@ -69,7 +74,7 @@ func init() {
 		logging.Info("Mutex created successfully, proceeding with AppKiller initialization.")
 	}
 
-	logging.Info("AppKiller initialized with app='%s', cron='%s', atLaunch=%v", appToKill, schedule, atLaunch)
+	logging.Info("AppKiller initialized with app='%s', cron='%s', atLaunch=%v, count=%d", appToKill, schedule, atLaunch, exCount)
 }
 
 func main() {
@@ -101,6 +106,7 @@ func onReady() {
 	systray.SetTitle(applicationName)
 
 	mLastAttempt := systray.AddMenuItem("Last attempt: initializing...", "Most recent attempt time")
+	mShowLog := systray.AddMenuItem("Open Log", "Show the log file")
 	mManual := systray.AddMenuItem("Trigger Now", "Manually trigger kill action")
 	mQuit := systray.AddMenuItem("Exit", "Quit the AppKiller")
 	mLastAttempt.Disable()
@@ -122,6 +128,12 @@ func onReady() {
 				logging.Info("Manual trigger clicked")
 				status := killApp(appToKill)
 				updateAttempt(time.Now(), status)
+			case <-mShowLog.ClickedCh:
+				logging.Info("Show log clicked")
+				logging.Show()
+				if err := logging.Show(); err != nil {
+					logging.Error("Failed to open log file: %v", err)
+				}
 			case <-mQuit.ClickedCh:
 				systray.Quit()
 				return
@@ -140,8 +152,18 @@ func startAppKiller(updateAttempt func(time.Time, string)) {
 	c := cron.New()
 
 	_, err := c.AddFunc(schedule, func() {
+		logging.Info("Scheduled task triggered")
 		status := killApp(appToKill)
 		updateAttempt(time.Now(), status)
+		if exCount > 0 {
+			exCount--
+			logging.Info("Remaining executions: %d", exCount)
+			if exCount == 0 {
+				logging.Info("Max count reached, stopping cron scheduler")
+				c.Stop()
+				systray.Quit() // just quit the whole app
+			}
+		}
 	})
 	if err != nil {
 		panic(fmt.Sprintf("Failed to parse cron expression '%s': %v", schedule, err))
@@ -149,8 +171,7 @@ func startAppKiller(updateAttempt func(time.Time, string)) {
 
 	if atLaunch {
 		logging.Info("Immediate execution requested")
-		status := killApp(appToKill)
-		updateAttempt(time.Now(), status)
+		killAppAction(appToKill, updateAttempt)
 	}
 
 	c.Start()
@@ -158,9 +179,14 @@ func startAppKiller(updateAttempt func(time.Time, string)) {
 	select {}
 }
 
+func killAppAction(name string, updateAttempt func(time.Time, string)) {
+	status := killApp(appToKill)
+	updateAttempt(time.Now(), status)
+}
+
 func killApp(name string) string {
 	if name == "" {
-		return "not required"
+		return "App not specified"
 	}
 
 	// running, err := isProcessRunning(name)

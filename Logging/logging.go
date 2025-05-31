@@ -3,6 +3,8 @@ package logging
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"time"
 
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -11,13 +13,37 @@ import (
 var logRotator *lumberjack.Logger
 
 func Init() {
+	logPath := "appkiller.log"
+
+	logPath = filepath.Join(os.Getenv("ProgramData"), "AppKiller", "appkiller.log")
+	os.MkdirAll(filepath.Dir(logPath), 0755)
+
 	logRotator = &lumberjack.Logger{
-		Filename:   "appkiller.log",
+		Filename:   logPath,
 		MaxSize:    1,  // megabytes before rotation
 		MaxBackups: 3,  // number of backups to keep
 		MaxAge:     30, // days to keep backups
 		Compress:   false,
 	}
+}
+
+func Show() error {
+	if logRotator == nil {
+		return fmt.Errorf("logging not initialized")
+	}
+
+	logFilePath := logRotator.Filename
+	if logFilePath == "" {
+		return fmt.Errorf("log file path is empty")
+	}
+
+	cmd := exec.Command("notepad.exe", logFilePath)
+	err := cmd.Start()
+	if err != nil {
+		return fmt.Errorf("could not open log file: %w", err)
+	}
+
+	return nil
 }
 
 func Info(format string, args ...interface{}) {
