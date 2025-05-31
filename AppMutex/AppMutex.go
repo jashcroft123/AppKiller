@@ -1,53 +1,45 @@
-//go:build windows
-
 package appmutex
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"runtime"
-	"syscall"
-	"unsafe"
+
+	"github.com/gofrs/flock"
 )
 
-var (
-	kernel32         = syscall.NewLazyDLL("kernel32.dll")
-	procCreateMutexW = kernel32.NewProc("CreateMutexW")
-	procReleaseMutex = kernel32.NewProc("ReleaseMutex")
-	procCloseHandle  = kernel32.NewProc("CloseHandle")
-)
+var lock *flock.Flock
 
-const ERROR_ALREADY_EXISTS = 183
+// CreateMutex tries to acquire a file lock to prevent multiple instances.
+func CreateMutex(name string) error {
+	lockFile := getLockFilePath(name)
+	lock = flock.New(lockFile)
 
-func CreateMutex(name string) (syscall.Handle, error) {
-	if runtime.GOOS != "windows" {
-		return 0, fmt.Errorf("not supported on %s", runtime.GOOS)
-	}
-
-	namePtr, err := syscall.UTF16PtrFromString("Local\\" + name)
+	locked, err := lock.TryLock()
 	if err != nil {
-		return 0, fmt.Errorf("invalid mutex name: %w", err)
+		return fmt.Errorf("could not acquire lock: %w", err)
+	}
+	if !locked {
+		return fmt.Errorf("another instance is already running")
 	}
 
-	handle, _, errCreate := procCreateMutexW.Call(0, 0, uintptr(unsafe.Pointer(namePtr)))
-
-	if handle == 0 {
-		return 0, fmt.Errorf("CreateMutexW failed: %v", errCreate)
-	}
-
-	// The error returned from Call may indicate the mutex already existed
-	if errCreate == syscall.ERROR_ALREADY_EXISTS {
-		// Handle exists but we don't want to use it
-		procCloseHandle.Call(handle)
-		return 0, fmt.Errorf("mutex already exists")
-	}
-
-	return syscall.Handle(handle), nil
+	return nil
 }
 
-// ReleaseMutex releases and closes the handle.
-func ReleaseMutex(handle syscall.Handle) {
-	if handle != 0 {
-		procReleaseMutex.Call(uintptr(handle))
-		procCloseHandle.Call(uintptr(handle))
+// ReleaseMutex releases the file lock.
+func ReleaseMutex() {
+	if lock != nil {
+		_ = lock.Unlock()
 	}
+}
+
+func getLockFilePath(name string) string {
+	var dir string
+	if runtime.GOOS == "windows" {
+		dir = os.Getenv("APPDATA")
+	} else {
+		dir = os.TempDir()
+	}
+	return filepath.Join(dir, name+".lock")
 }

@@ -26,7 +26,6 @@ const (
 //go:embed icon.ico
 var iconData []byte
 
-var mutex syscall.Handle // Mutex handle to ensure single instance
 var (
 	appToKill string
 	schedule  string
@@ -61,7 +60,7 @@ func init() {
 
 	var err error
 	mutexName := fmt.Sprintf("%sMutex_%s", applicationName, os.Getenv("USERNAME"))
-	mutex, err = appMutex.CreateMutex(mutexName)
+	err = appMutex.CreateMutex(mutexName)
 	if err != nil {
 		logging.Error("Another instance is already running: %v", err)
 		fmt.Println("AppKiller is already running.")
@@ -80,7 +79,7 @@ func main() {
 }
 
 func cleanUp() {
-	appMutex.ReleaseMutex(mutex)
+	appMutex.ReleaseMutex()
 	logging.Info("Mutex released, exiting AppKiller.")
 	logging.Info("AppKiller exiting gracefully.")
 	logging.Close()
