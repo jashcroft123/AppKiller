@@ -4,16 +4,19 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-var logFile *os.File
+var logRotator *lumberjack.Logger
 
 func Init() {
-	var err error
-	logFile, err = os.OpenFile("appkiller.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to open log file: %v\n", err)
-		logFile = nil
+	logRotator = &lumberjack.Logger{
+		Filename:   "appkiller.log",
+		MaxSize:    1,  // megabytes before rotation
+		MaxBackups: 3,  // number of backups to keep
+		MaxAge:     30, // days to keep backups
+		Compress:   false,
 	}
 }
 
@@ -34,7 +37,14 @@ func logWithLevel(level, format string, args ...interface{}) {
 	msg := fmt.Sprintf(format, args...)
 	logLine := fmt.Sprintf("%s %s: %s\n", timestamp, level, msg)
 	fmt.Fprint(os.Stderr, logLine)
-	if logFile != nil {
-		logFile.WriteString(logLine)
+
+	if logRotator != nil {
+		logRotator.Write([]byte(logLine))
+	}
+}
+
+func Close() {
+	if logRotator != nil {
+		logRotator.Close()
 	}
 }
